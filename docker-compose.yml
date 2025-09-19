@@ -1,0 +1,69 @@
+version: '3.8'
+
+services:
+  # Coral Protocol Server
+  coral-server:
+    build:
+      context: https://github.com/Coral-Protocol/coral-server.git
+      dockerfile: Dockerfile
+    container_name: coral-server
+    ports:
+      - "5555:5555"
+    environment:
+      - NODE_ENV=production
+      - PORT=5555
+      - CORS_ORIGIN=*
+      - LOG_LEVEL=info
+      - DATABASE_URL=redis://redis:6379/0
+    networks:
+      - coral-network
+    restart: unless-stopped
+    depends_on:
+      redis:
+        condition: service_started
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5555/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Your MCP Server
+  mcp-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: coral-mcp-server
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - RPC_URL=${RPC_URL:-https://api.mainnet-beta.solana.com}
+      - CORAL_SERVER_URL=http://coral-server:5555
+    depends_on:
+      coral-server:
+        condition: service_healthy
+    networks:
+      - coral-network
+    restart: unless-stopped
+    volumes:
+      - ./logs:/app/logs
+
+  # Optional: Redis for session management
+  redis:
+    image: redis:7-alpine
+    container_name: coral-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - coral-network
+    restart: unless-stopped
+    volumes:
+      - redis_data:/data
+
+networks:
+  coral-network:
+    driver: bridge
+
+volumes:
+  redis_data:
