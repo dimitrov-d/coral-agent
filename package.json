@@ -1,0 +1,28 @@
+{
+  "name": "explainer-mcp-server",
+  "version": "1.1.0",
+  "description": "Explainer Agent MCP Server",
+  "bin": {
+    "mcp-server": "./dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "workspaces": [
+    "src/*"
+  ],
+  "scripts": {
+    "start": "tsx src/index.ts",
+    "build": "tsc && shx chmod +x dist/*.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.18.1",
+    "@solana/web3.js": "^1.98.4",
+    "typescript": "^5.9.2"
+  },
+  "devDependencies": {
+    "@types/node": "^24.5.2",
+    "shx": "^0.4.0",
+    "tsx": "^4.20.5"
+  }
+}

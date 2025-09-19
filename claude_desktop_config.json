@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "explainer-mcp-server": {
+      "command": "tsx",
+      "args": ["/path/to/mcp-server/src/index.ts"],
+      "env": {
+        "RPC_URL": "your_url"
+      }
+    }
+  }
+}
