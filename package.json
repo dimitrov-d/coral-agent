@@ -24,7 +24,9 @@
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.18.1",
     "@solana/web3.js": "^1.98.4",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.2",
+    "zod": "^3.23.8",
+    "zod-to-json-schema": "^3.23.2"
   },
   "devDependencies": {
     "@types/node": "^24.5.2",
